@@ -9,7 +9,7 @@
     "noImplicitAny": false,
     "allowSyntheticDefaultImports": true,
     "outDir": "lib",
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "noUnusedParameters": true,
     "strictNullChecks": true,
     "sourceMap": true,
@@ -20,8 +20,8 @@
     "resolveJsonModule": true,
     "typeRoots": [
       "node_modules/@types"
-    ]
+    ],
   },
-  "include": ["./src", "./types", "components.d.ts"],
+  "include": ["./src/*", "./types", "components.d.ts"],
   "compileOnSave": false
 }

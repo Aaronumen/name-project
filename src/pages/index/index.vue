@@ -1,109 +1,87 @@
 <template>
   <view class="index">
-    <view v-if="state.userInfo.avatarUrl">
-      <nut-avatar size="large" shape="round">
-        <img :src="state.userInfo.avatarUrl" />
-      </nut-avatar>
-    </view>
-    <view>
-      <nut-form :model-value="formValue">
-        <nut-form-item label="姓" required>
-          <nut-input v-model="formValue.name"></nut-input>
-        </nut-form-item>
-        <nut-form-item label="出生日期">
-          <nut-input
-            v-model="formValue.time"
-            @click-input="datePickerVisible=!datePickerVisible"
-          ></nut-input>
-        </nut-form-item>
-        <nut-form-item label="名字风格">
-         <nut-range v-model='formValue.style' max="10" min="0" :marks="{0:'阳',5:'中',10:'阴'}"></nut-range>
-        </nut-form-item>
-      </nut-form>
-    </view>
-    <view class="btn">
-      <nut-button type="primary" @click="handleClick('text', state.msg2, true)"
-        >点我</nut-button
-      >
-    </view>
-    <nut-popup position="bottom" v-model:visible="datePickerVisible">
+    <view>{{ `${curDate} ${dateWeek}` }}</view>
+    <view> {{ `值班人：${curPeople}` }}</view>
+    <!-- <nut-cell title="选择日期" :desc="curDate" @click="show = true"></nut-cell>
+    <nut-popup position="bottom" v-model:visible="show">
       <nut-date-picker
-        v-model="currentDate"
-        title="日期时间选择"
-        type="datetime"
-        @confirm="datePikerConfirm"
-      ></nut-date-picker>
-      <nut-toast
-        :msg="state.msg2"
-        v-model:visible="state.show"
-        :type="state.type"
-        :cover="state.cover"
-      />
-    </nut-popup>
-
-    <button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">
-      获取手机号
-    </button>
+        v-model="curDate"
+        :min-date="minDate"
+        @confirm="popupConfirm"
+        :is-show-chinese="true"
+      >
+      </nut-date-picker>
+    </nut-popup> -->
+    <nut-cell
+    :showIcon="true"
+    title="选择日期"
+    :desc="curDate"
+    @click="show=true"
+  >
+  </nut-cell>
+  <nut-calendar
+    v-model:visible="show"
+    :default-value="curDate"
+    is-auto-back-fill
+    @close="show=false"
+    @choose="setChooseValue"
+  >
+  </nut-calendar>
   </view>
 </template>
 
 <script setup lang="ts">
-import { reactive, onMounted, ref } from "vue";
-import dayjs from "dayjs";
-onMounted(() => {});
+import {  shallowRef, computed } from "vue";
+import { format, differenceInDays,getDay } from "date-fns";
 
-const datePickerVisible = ref(false);
+const show = shallowRef(false);
 
-const currentDate = ref(dayjs());
+enum WEEK{
+  '星期一'=1,
+  '星期二',
+  '星期三',
+  '星期四',
+  '星期五',
+  '星期六',
+  '星期日',
+}
 
-const formValue = ref({
-  name: "",
-  time: "",
-  style:0
-});
+const minDate = new Date();
 
-const getPhoneNumber = (e) => {
-  console.log(e);
+const curDate = shallowRef(format(new Date(), "yyyy-MM-dd"));
+
+const curIdx = computed(() => dayDifference.value % 5);
+
+const startDate = shallowRef("2023-10-24");
+
+const dateWeek=computed(()=> `${WEEK[getDay(new Date(curDate.value))]}`)
+
+ const setChooseValue = (param) => {
+        curDate.value = param[3];
 };
 
-const datePikerConfirm = (e: any) => {
-  const {selectedValue}=e;
-  console.log('selectedValue: ', selectedValue);
-  const time=`${selectedValue[0]}-${selectedValue[1]}-${selectedValue[2]} ${selectedValue[3]}:${selectedValue[4]}`
-  formValue.value.time=time
-  datePickerVisible.value=false
-  console.log('time: ', time);
+const dayDifference = computed(() =>
+  differenceInDays(new Date(curDate.value), new Date(startDate.value))
+);
+
+const peopleData = shallowRef(["小曾", "小杨", "小伍", "小陈", "小李子"]);
+
+const curPeople = computed(() => peopleData.value[curIdx.value]);
+
+const getMonthOrDay=(str:string) => {
+  return str.length === 1? `0${str.length}` : str
+}
+
+const transformDate = (date: string) => {
+  const parts = date.split(/(年|月|日)/);
+  return `${parts[0]}-${getMonthOrDay(parts[2])}-${getMonthOrDay(parts[4])}`
+}
+
+const popupConfirm = ({ selectedValue, selectedOptions }) => {
+  curDate.value = selectedOptions.map((val: any) => val.text).join("");
+  show.value = false;
 };
 
-const state = reactive({
-  msg: "欢迎使用 NutUI4.0 开发小程序",
-  msg2: "你成功了～",
-  type: "text",
-  show: false,
-  cover: false,
-  userInfo: {
-    avatarUrl: "",
-    nickName: "游客",
-  },
-});
-
-const handleClick = (type, msg, cover = false) => {
-  state.show = true;
-  state.msg2 = msg;
-  state.type = type;
-  state.cover = cover;
-  wx.getUserProfile({
-    desc: "sss用于完善会员资料", // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-    success: (res) => {
-      const {
-        userInfo: { avatarUrl, nickName },
-      } = res;
-      console.log(res);
-      state.userInfo.avatarUrl = avatarUrl;
-      state.userInfo.nickName = nickName;
-    },
-  });
-};
 </script>
 
 <style lang="scss">

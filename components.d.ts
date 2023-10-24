@@ -7,14 +7,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    NutAvatar: typeof import('@nutui/nutui-taro')['Avatar']
-    NutButton: typeof import('@nutui/nutui-taro')['Button']
-    NutDatePicker: typeof import('@nutui/nutui-taro')['DatePicker']
-    NutForm: typeof import('@nutui/nutui-taro')['Form']
-    NutFormItem: typeof import('@nutui/nutui-taro')['FormItem']
-    NutInput: typeof import('@nutui/nutui-taro')['Input']
-    NutPopup: typeof import('@nutui/nutui-taro')['Popup']
-    NutRange: typeof import('@nutui/nutui-taro')['Range']
-    NutToast: typeof import('@nutui/nutui-taro')['Toast']
+    NutCalendar: typeof import('@nutui/nutui-taro')['Calendar']
+    NutCell: typeof import('@nutui/nutui-taro')['Cell']
   }
 }
