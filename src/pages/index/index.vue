@@ -85,11 +85,12 @@ const transformDate = (date: string) => {
   font-size: 1.5rem;
   display: flex;
   flex-direction: column;
-  // justify-content: center;
+  justify-content: center;
   align-items: center;
   height: 100%;
   background-image: url('../../assets/images/bg.jpg');
   background-size: cover;
+  font-family: SimSun;
 }
 .cell{
   position: absolute;
