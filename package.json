@@ -48,7 +48,7 @@
     "@tarojs/plugin-platform-qq": "3.5.11",
     "@tarojs/plugin-platform-swan": "3.5.11",
     "@tarojs/plugin-platform-tt": "3.5.11",
-    "@tarojs/plugin-platform-weapp": "3.5.11",
+    "@tarojs/plugin-platform-weapp": "3.6.11",
     "@tarojs/router": "3.5.11",
     "@tarojs/runtime": "3.5.11",
     "@tarojs/shared": "3.5.11",

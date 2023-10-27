@@ -2,23 +2,15 @@
   <view class="index">
     <view>{{ `${curDate} ${dateWeek}` }}</view>
     <view> {{ `值班人：${curPeople}` }}</view>
-    <!-- <nut-cell title="选择日期" :desc="curDate" @click="show = true"></nut-cell>
-    <nut-popup position="bottom" v-model:visible="show">
-      <nut-date-picker
-        v-model="curDate"
-        :min-date="minDate"
-        @confirm="popupConfirm"
-        :is-show-chinese="true"
-      >
-      </nut-date-picker>
-    </nut-popup> -->
-    <nut-cell
+    <!-- <nut-cell
     :showIcon="true"
     title="选择日期"
     :desc="curDate"
     @click="show=true"
-  >
-  </nut-cell>
+    class="cell"
+  > -->
+  <!-- </nut-cell> -->
+  <nut-button type="info" class="cell" @click="show=true">选择日期</nut-button>
   <nut-calendar
     v-model:visible="show"
     :default-value="curDate"
@@ -37,16 +29,15 @@ import { format, differenceInDays,getDay } from "date-fns";
 const show = shallowRef(false);
 
 enum WEEK{
-  '星期一'=1,
+  '星期日',
+  '星期一',
   '星期二',
   '星期三',
   '星期四',
   '星期五',
   '星期六',
-  '星期日',
 }
 
-const minDate = new Date();
 
 const curDate = shallowRef(format(new Date(), "yyyy-MM-dd"));
 
@@ -72,24 +63,38 @@ const getMonthOrDay=(str:string) => {
   return str.length === 1? `0${str.length}` : str
 }
 
+
 const transformDate = (date: string) => {
+  if (!date) return "";
   const parts = date.split(/(年|月|日)/);
   return `${parts[0]}-${getMonthOrDay(parts[2])}-${getMonthOrDay(parts[4])}`
 }
 
-const popupConfirm = ({ selectedValue, selectedOptions }) => {
-  curDate.value = selectedOptions.map((val: any) => val.text).join("");
-  show.value = false;
-};
 
 </script>
 
 <style lang="scss">
+:deep(.nut-button--default){
+  background-color: #9c88ff!important;
+}
 .index {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  color: #9c88ff;
+  font-weight: bold;
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  // justify-content: center;
+  align-items: center;
+  height: 100%;
+  background-image: url('../../assets/images/bg.jpg');
+  background-size: cover;
+}
+.cell{
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
 }
 .top {
   width: 100%;
